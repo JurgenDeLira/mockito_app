@@ -8,11 +8,12 @@ public class Examen {
     private String nombre;
     private List<String> preguntas;
 
-    public Examen(String nombre, Long id) {
-        this.nombre = nombre;
+    public Examen(Long id, String nombre) {
         this.id = id;
+        this.nombre = nombre;
         this.preguntas = new ArrayList<>();
     }
+
 
     public Long getId() {
         return id;

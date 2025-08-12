@@ -1,4 +1,4 @@
-package org.jdelira.mockitoapp.DAO;
+package org.jdelira.mockitoapp.DAOorRepositories;
 
 import org.jdelira.mockitoapp.models.Examen;
 
