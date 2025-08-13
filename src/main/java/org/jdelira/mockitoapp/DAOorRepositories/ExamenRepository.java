@@ -5,6 +5,6 @@ import org.jdelira.mockitoapp.models.Examen;
 import java.util.List;
 
 public interface ExamenRepository {
-
+    Examen guardar(Examen examen);
     List<Examen> findAll();
 }
