@@ -12,8 +12,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ExamenServiceImplTest {
 
@@ -56,5 +55,26 @@ class ExamenServiceImplTest {
         Examen examen = service.findExamenPorNombreConPreguntas("Matemáticas");
         assertEquals(5, examen.getPreguntas().size());
         assertTrue(examen.getPreguntas().contains("Aritmética"));
+    }
+
+    @Test
+    void testPreguntasExamenVerify(){
+        when(repository.findAll()).thenReturn(Datos.EXAMENES);
+        when(preguntaRepository.findPreguntasPorExamenId(anyLong())).thenReturn(Datos.PREGUNTAS);
+        Examen examen = service.findExamenPorNombreConPreguntas("Matemáticas");
+        assertEquals(5, examen.getPreguntas().size());
+        assertTrue(examen.getPreguntas().contains("Aritmética"));
+        verify(repository).findAll();
+        verify(preguntaRepository).findPreguntasPorExamenId(anyLong());
+    }
+
+    @Test
+    void testNoExisteExamenVerify(){
+        when(repository.findAll()).thenReturn(Collections.emptyList());
+        when(preguntaRepository.findPreguntasPorExamenId(anyLong())).thenReturn(Datos.PREGUNTAS);
+        Examen examen = service.findExamenPorNombreConPreguntas("Matemáticas");
+        assertNull(examen);
+        verify(repository).findAll();
+        verify(preguntaRepository).findPreguntasPorExamenId(5L);
     }
 }
