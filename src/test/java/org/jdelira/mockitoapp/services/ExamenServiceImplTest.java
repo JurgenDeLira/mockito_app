@@ -5,6 +5,10 @@ import org.jdelira.mockitoapp.DAOorRepositories.PreguntaRepository;
 import org.jdelira.mockitoapp.models.Examen;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,19 +16,26 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class ExamenServiceImplTest {
 
+    @Mock
     ExamenRepository repository;
-    ExamenService service;
+    @Mock
     PreguntaRepository preguntaRepository;
+
+    @InjectMocks
+    ExamenServiceImpl service;
 
     @BeforeEach
     void setUp() {
-        repository = mock(ExamenRepository.class);
+       // MockitoAnnotations.openMocks(this);
+        /*repository = mock(ExamenRepository.class);
         preguntaRepository = mock(PreguntaRepository.class);
-        service = new ExamenServiceImpl(repository, preguntaRepository);
+        service = new ExamenServiceImpl(repository, preguntaRepository);*/
     }
 
     @Test
