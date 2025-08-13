@@ -1,7 +1,8 @@
 package org.jdelira.mockitoapp.services;
 
-import org.jdelira.mockitoapp.DAOorRepositories.ExamenRepository;
-import org.jdelira.mockitoapp.DAOorRepositories.PreguntaRepository;
+import org.jdelira.mockitoapp.DAOorRepositories.ExamenRepositoryImpl;
+import org.jdelira.mockitoapp.DAOorRepositories.PreguntaRepositoryImpl;
+import org.jdelira.mockitoapp.Datos;
 import org.jdelira.mockitoapp.models.Examen;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,9 +24,9 @@ import static org.mockito.Mockito.*;
 class ExamenServiceImplTest {
 
     @Mock
-    ExamenRepository repository;
+    ExamenRepositoryImpl repository;
     @Mock
-    PreguntaRepository preguntaRepository;
+    PreguntaRepositoryImpl preguntaRepository;
 
     @InjectMocks
     ExamenServiceImpl service;
@@ -36,8 +37,8 @@ class ExamenServiceImplTest {
     @BeforeEach
     void setUp() {
        // MockitoAnnotations.openMocks(this);
-        /*repository = mock(ExamenRepository.class);
-        preguntaRepository = mock(PreguntaRepository.class);
+        /*repository = mock(ExamenRepositoryImpl.class);
+        preguntaRepository = mock(PreguntaRepositoryImpl.class);
         service = new ExamenServiceImpl(repository, preguntaRepository);*/
     }
 
@@ -262,5 +263,16 @@ class ExamenServiceImplTest {
 
         verify(repository).guardar(any(Examen.class));
         verify(preguntaRepository).guardarVarias(anyList());
+    }
+
+    @Test
+    void testDoCallRealMethod() {
+        when(repository.findAll()).thenReturn(Datos.EXAMENES);
+        //when(preguntaRepository.findPreguntasPorExamenId(anyLong())).thenReturn(Datos.PREGUNTAS);
+
+        doCallRealMethod().when(preguntaRepository).findPreguntasPorExamenId(anyLong());
+        Examen examen = service.findExamenPorNombreConPreguntas("Matemáticas");
+        assertEquals(5L, examen.getId());
+        assertEquals("Matemáticas", examen.getNombre());
     }
 }

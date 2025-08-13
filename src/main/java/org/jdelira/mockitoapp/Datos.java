@@ -1,4 +1,4 @@
-package org.jdelira.mockitoapp.services;
+package org.jdelira.mockitoapp;
 
 import org.jdelira.mockitoapp.models.Examen;
 
