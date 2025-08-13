@@ -1,6 +1,8 @@
 package org.jdelira.mockitoapp.services;
 
+import org.jdelira.mockitoapp.DAOorRepositories.ExamenRepository;
 import org.jdelira.mockitoapp.DAOorRepositories.ExamenRepositoryImpl;
+import org.jdelira.mockitoapp.DAOorRepositories.PreguntaRepository;
 import org.jdelira.mockitoapp.DAOorRepositories.PreguntaRepositoryImpl;
 import org.jdelira.mockitoapp.Datos;
 import org.jdelira.mockitoapp.models.Examen;
@@ -12,6 +14,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -274,5 +277,25 @@ class ExamenServiceImplTest {
         Examen examen = service.findExamenPorNombreConPreguntas("Matemáticas");
         assertEquals(5L, examen.getId());
         assertEquals("Matemáticas", examen.getNombre());
+    }
+
+    @Test
+    void testSpy() {
+        ExamenRepository examenRepository = spy(ExamenRepositoryImpl.class);
+        PreguntaRepository preguntaRepository = spy(PreguntaRepositoryImpl.class);
+        ExamenService examenService = new ExamenServiceImpl(examenRepository, preguntaRepository);
+
+        List<String> preguntas = Arrays.asList("Aritmética");
+        //when(preguntaRepository.findPreguntasPorExamenId(anyLong())).thenReturn(preguntas);
+        doReturn(preguntas).when(preguntaRepository).findPreguntasPorExamenId(anyLong());
+        Examen examen = examenService.findExamenPorNombreConPreguntas("Matemáticas");
+        assertEquals(5, examen.getId());
+        assertEquals("Matemáticas", examen.getNombre());
+        assertEquals(1, examen.getPreguntas().size());
+        assertTrue(examen.getPreguntas().contains("Aritmética"));
+
+        verify(examenRepository).findAll();
+        verify(preguntaRepository).findPreguntasPorExamenId(anyLong());
+
     }
 }
